@@ -34,7 +34,7 @@ class AddonsManagerSettings extends Properties {
    */
   private static final Logger LOG = Logger.getInstance()
 
-  static final String ADDONS_MANAGER_PROPERTIES_JVM_PROPERTY = "am.properties.path"
+  static final String ADDONS_MANAGER_PROPERTIES_JVM_PROPERTY = "addons-manager.properties.path"
   static final String ADDONS_MANAGER_PROPERTIES = "am.properties"
   static final String PROPERTY_PREFIX = "am"
 
@@ -48,8 +48,8 @@ class AddonsManagerSettings extends Properties {
    */
   protected void init() {
     InputStream inputStream = null;
-    if (System.getProperty("am.properties.path") != null) {
-      inputStream = new FileInputStream(System.getProperty("am.properties.path"))
+    if (System.getProperty("addons-manager.properties.path") != null) {
+      inputStream = new FileInputStream(System.getProperty("addons-manager.properties.path"))
     } else {
       inputStream = getClass().getClassLoader().getResourceAsStream(ADDONS_MANAGER_PROPERTIES)
     }
