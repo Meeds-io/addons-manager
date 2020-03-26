@@ -69,9 +69,9 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
     <ut.verbose>false</ut.verbose>
-    <it.platform.groupId>org.meeds.distribution</it.platform.groupId>
+    <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
     <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
-    <org.meeds.distribution.version>1.0.x-SNAPSHOT</org.meeds.distribution.version>
+    <io.meeds.distribution.version>1.0.x-SNAPSHOT</io.meeds.distribution.version>
     <it.dataDirPath>${project.build.directory}/test-data</it.dataDirPath>
     <it.workingDirPath>${project.build.directory}/integration-tests</it.workingDirPath>
     <it.verbose>false</it.verbose>
@@ -373,7 +373,7 @@
                 <it.dataDirPath>${it.dataDirPath}</it.dataDirPath>
                 <it.workingDirPath>${it.workingDirPath}</it.workingDirPath>
                 <it.jacocoAgent>${argLine}</it.jacocoAgent>
-                <it.platformVersion>${org.meeds.distribution.version}</it.platformVersion>
+                <it.platformVersion>${io.meeds.distribution.version}</it.platformVersion>
                 <it.testedArtifactPath>${project.build.directory}/${project.build.finalName}.jar</it.testedArtifactPath>
                 <it.verbose>${it.verbose}</it.verbose>
                 <it.webServerHttpPort>${it.webServerHttpPort}</it.webServerHttpPort>
@@ -386,7 +386,7 @@
         <dependency>
           <groupId>${it.platform.groupId}</groupId>
           <artifactId>${it.platform.artifactId}</artifactId>
-          <version>${org.meeds.distribution.version}</version>
+          <version>${io.meeds.distribution.version}</version>
           <type>zip</type>
           <scope>test</scope>
         </dependency>
@@ -401,7 +401,7 @@
         </property>
       </activation>
       <properties>
-        <it.platform.groupId>org.meeds.distribution</it.platform.groupId>
+        <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
         <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
       </properties>
     </profile>
