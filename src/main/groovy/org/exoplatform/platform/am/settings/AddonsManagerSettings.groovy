@@ -20,6 +20,8 @@
  */
 package org.exoplatform.platform.am.settings
 
+import java.io.FileInputStream;
+
 import org.exoplatform.platform.am.ex.ErroneousSetupException
 import org.exoplatform.platform.am.utils.Logger
 /**
@@ -32,7 +34,8 @@ class AddonsManagerSettings extends Properties {
    */
   private static final Logger LOG = Logger.getInstance()
 
-  static final String ADDONS_MANAGER_PROPERTIES = "org/exoplatform/platform/am/settings/am.properties"
+  static final String ADDONS_MANAGER_PROPERTIES_JVM_PROPERTY = "am.properties.path"
+  static final String ADDONS_MANAGER_PROPERTIES = "am.properties"
   static final String PROPERTY_PREFIX = "am"
 
   AddonsManagerSettings() {
@@ -44,7 +47,12 @@ class AddonsManagerSettings extends Properties {
    * Automatically load properties for {@link AddonsManagerSettings#ADDONS_MANAGER_PROPERTIES}
    */
   protected void init() {
-    InputStream inputStream = getClass().getClassLoader().getResourceAsStream(ADDONS_MANAGER_PROPERTIES)
+    InputStream inputStream = null;
+    if (System.getProperty("am.properties.path") != null) {
+      inputStream = new FileInputStream(System.getProperty("am.properties.path"))
+    } else {
+      inputStream = getClass().getClassLoader().getResourceAsStream(ADDONS_MANAGER_PROPERTIES)
+    }
 
     if (inputStream == null) {
       throw new ErroneousSetupException(

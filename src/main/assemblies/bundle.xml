@@ -51,6 +51,11 @@
         <exclude>**/*.jar</exclude>
       </excludes>
     </fileSet>
+    <fileSet>
+      <outputDirectory>/addons/configuration/</outputDirectory>
+      <directory>${project.basedir}/src/main/configuration/</directory>
+      <filtered>true</filtered>
+    </fileSet>
     <!-- Others files to filter -->
     <fileSet>
       <outputDirectory>/</outputDirectory>
