@@ -46,7 +46,7 @@ class CompatibilityException extends AddonsManagerException {
                 "") +
             (!AddonService.instance.testVersionCompatibility(
                 plfSettings.version, addon.compatibility) ?
-                "Only eXo platform versions ${addon.compatibility} are supported. " :
+                "Product version ${plfSettings.version} is not compatible. Only versions ${addon.compatibility} are supported. " :
                 "") +
             "Use --no-compat to bypass this compatibility check and install anyway"
     )

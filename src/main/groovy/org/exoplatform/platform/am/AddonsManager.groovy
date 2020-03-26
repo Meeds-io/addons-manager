@@ -48,13 +48,8 @@ try {
   // Parse command line parameters and fill settings with user inputs
   commandLineParameters = clp.parse(args)
 
-  if (!commandLineParameters.batchMode) {
-    // display header
-    log.displayHeader(env.manager.version)
-  } else {
-    log.info("eXo Add-ons Manager v@|yellow ${env.manager.version}|@")
-    log.infoHR()
-  }
+  log.info("Add-ons Manager v@|yellow ${env.manager.version}|@")
+  log.infoHR()
   // Show usage text when -h or --help option is used and exit
   if (commandLineParameters.help) {
     clp.usage()
@@ -77,8 +72,6 @@ try {
       break
   }
 } catch (CommandLineParsingException clpe) {
-  // display header
-  log.displayHeader(env.manager.version)
   log.error clpe
   clp.usage()
   returnCode = clpe.errorCode
