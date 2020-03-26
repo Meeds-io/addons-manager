@@ -109,6 +109,7 @@ move /y "%PLF_HOME%\addons\addons-manager.jar.new" "%PLF_HOME%\addons\addons-man
 :execCmd
 set JAVA_OPTS=-Dplf.home="%PLF_HOME%" %EXO_AM_OPTS%
 set JAVA_OPTS=%JAVA_OPTS% -Duser.language="en"
+set JAVA_OPTS=%JAVA_OPTS% -Dam.properties.path="%PLF_HOME%\addons\configuration\am.properties"
 rem Ignore unrecognized option to avoid JDK 8 to complain about JDK 9 option (--add-opens)
 set JAVA_OPTS=%JAVA_OPTS% -XX:+IgnoreUnrecognizedVMOptions
 rem Open all required modules for reflective access operations

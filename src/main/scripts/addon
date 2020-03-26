@@ -101,6 +101,7 @@ fi
 
 JAVA_OPTS="-Dplf.home=\"$PLF_HOME\" $EXO_AM_OPTS"
 JAVA_OPTS="$JAVA_OPTS -Duser.language=\"en\""
+JAVA_OPTS="$JAVA_OPTS -Dam.properties.path=\"$PLF_HOME/addons/configuration/am.properties\""
 # Ignore unrecognized option to avoid JDK 8 to complain about JDK 9 option (--add-opens)
 JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions"
 # Open all required modules for reflective access operations
