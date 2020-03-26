@@ -176,19 +176,6 @@ class Logger {
     errorHR("-")
   }
 
-  void displayHeader(String managerVersion) {
-    info("""
-    @|yellow               xx      xx |@
-    @|yellow                xx    xx  |@
-    @|yellow    eeeeeee      xx  xx  |@    ooooooo
-    @|yellow  ee       ee     xxxx   |@  oo       @|yellow oo  |@
-    @|yellow eeeeeeeeeeeee    xxxx   |@ oo        @|yellow  oo |@
-    @|yellow ee              xx  xx  |@ oo        @|yellow  oo |@
-    @|yellow  ee       ee   xx    xx |@  oo       @|yellow oo  |@
-    @|yellow    eeeeeee    xx      xx    ooooooo |@      Add-ons Manager v@|yellow ${managerVersion} |@
-    """)
-  }
-
   /**
    * Breaks up long line into multiline at the word boundary
    * From : http://groovy.codehaus.org/Formatting+simple+tabular+text+data
