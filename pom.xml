@@ -48,7 +48,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <!-- Project Dependencies -->
     <!-- **************************************** -->
     <aether.version>1.1.0</aether.version>
-    <groovy.version>2.4.12</groovy.version>
+    <groovy.version>3.0.7</groovy.version>
     <jcommander.version>1.35</jcommander.version>
     <jline.version>2.12</jline.version>
     <!-- Tests dependencies -->
