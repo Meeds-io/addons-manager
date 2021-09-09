@@ -22,10 +22,19 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.regex.Pattern
 
+import org.exoplatform.platform.am.utils.Logger
+
+import jdk.internal.org.jline.utils.Log;
+
 /**
  * Platform instance settings
  */
 class PlatformSettings {
+  /**
+   * Logger
+   */
+  private static final Logger LOG = Logger.getInstance()
+
   /**
    * The system property key used to pass the PLF home directory
    */
@@ -134,24 +143,28 @@ class PlatformSettings {
           "Erroneous setup, platform properties directory (${this.propertiesDirectory}) is invalid.")
     }
 
-    Pattern filePattern = ~/plf.*-edition-.*jar/
-    String fileFound
+    Pattern filePattern = ~/.*jar/
+    Properties platformProperties
     Closure findFilenameClosure = {
       if (filePattern.matcher(it.name).find()) {
-        fileFound = it
+        JarFile jarFile = new JarFile(it)
+        JarEntry jarEntry = jarFile.getJarEntry("conf/platform.properties")
+        try {
+          InputStream inputStream = jarFile.getInputStream(jarEntry)
+          if (inputStream != null) {
+            platformProperties = new Properties()
+            platformProperties.load(inputStream)
+            this.version = platformProperties.getProperty("product.version")
+          }
+        } catch (Exception e) {
+          // Expected when jar doesn't contain file platform.properties
+        }
       }
     }
     this.librariesDirectory.eachFile(findFilenameClosure)
-    if (fileFound == null) {
+    if (platformProperties == null) {
       throw new ErroneousSetupException(
           "Erroneous setup, Unable to find edition jar in ${librariesDirectory}")
-    } else {
-      JarFile jarFile = new JarFile(fileFound)
-      JarEntry jarEntry = jarFile.getJarEntry("conf/platform.properties")
-      InputStream inputStream = jarFile.getInputStream(jarEntry)
-      Properties platformProperties = new Properties()
-      platformProperties.load(inputStream)
-      this.version = platformProperties.getProperty("product.version")
     }
   }
 
