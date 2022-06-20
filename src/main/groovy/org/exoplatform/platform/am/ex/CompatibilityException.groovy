@@ -32,8 +32,8 @@ class CompatibilityException extends AddonsManagerException {
         "The add-on ${addon.id}:${addon.version} is not compatible : " +
             (!addon.supportedDistributions.contains(plfSettings.distributionType) ?
                 addon.supportedDistributions.size() == 1 ?
-                    "Only distribution ${addon.supportedDistributions[0]} is supported. " :
-                    "Only distributions ${addon.supportedDistributions.join(", ")} are supported. " :
+                    "Distribution ${plfSettings.distributionType} is not supported, Only distribution ${addon.supportedDistributions[0]} is supported. " :
+                    "Distribution ${plfSettings.distributionType} is not supported,Only distributions ${addon.supportedDistributions.join(", ")} are supported. " :
                 "") +
             (!AddonService.instance.testAppServerTypeCompatibility(plfSettings.appServerType, addon.supportedApplicationServers) ?
                 addon.supportedApplicationServers.size() == 1 ?

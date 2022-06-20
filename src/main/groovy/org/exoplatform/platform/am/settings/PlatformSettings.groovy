@@ -54,7 +54,7 @@ class PlatformSettings {
    * Distribution types on which PLF add-ons can be managed
    */
   enum DistributionType {
-    COMMUNITY, ENTERPRISE, UNKNOWN
+    COMMUNITY, ENTERPRISE, UNKNOWN, EXO_COMMUNITY
   }
 
   File homeDirectory
@@ -108,15 +108,6 @@ class PlatformSettings {
       throw new ErroneousSetupException("Erroneous setup, cannot compute the application server type.")
     }
 
-    if (new File(homeDirectory, "eXo_Subscription_Agreement_US.pdf").exists()) {
-      this.distributionType = DistributionType.ENTERPRISE
-    } else {
-      this.distributionType = DistributionType.COMMUNITY
-    }
-    if (DistributionType.UNKNOWN.equals(this.distributionType)) {
-      throw new ErroneousSetupException("Erroneous setup, cannot compute the distribution type.")
-    }
-
     this.librariesDirectory = new File(homeDirectory, this.appServerType.librariesPath)
     if (!this.librariesDirectory.isDirectory()) {
       throw new ErroneousSetupException("Erroneous setup, platform libraries directory (${this.librariesDirectory}) is invalid.")
@@ -134,7 +125,7 @@ class PlatformSettings {
           "Erroneous setup, platform properties directory (${this.propertiesDirectory}) is invalid.")
     }
 
-    Pattern filePattern = ~/plf.*-edition-.*jar/
+    Pattern filePattern = ~/.*-edition-service.*jar/
     String fileFound
     Closure findFilenameClosure = {
       if (filePattern.matcher(it.name).find()) {
@@ -146,6 +137,18 @@ class PlatformSettings {
       throw new ErroneousSetupException(
           "Erroneous setup, Unable to find edition jar in ${librariesDirectory}")
     } else {
+      if (fileFound.contains("plf-enterprise-edition-service")){ // eXo EE
+        this.distributionType = DistributionType.ENTERPRISE
+      } else if (fileFound.contains("plf-community-edition-service")) { // Meeds
+        this.distributionType = DistributionType.COMMUNITY
+      } else if (fileFound.contains("platform-community-edition-service")) { // eXo CE
+        this.distributionType = DistributionType.EXO_COMMUNITY
+      } else {
+        this.distributionType = DistributionType.UNKNOWN
+      }
+      if (DistributionType.UNKNOWN.equals(this.distributionType)) {
+        throw new ErroneousSetupException("Erroneous setup, cannot compute the distribution type.")
+      }
       JarFile jarFile = new JarFile(fileFound)
       JarEntry jarEntry = jarFile.getJarEntry("conf/platform.properties")
       InputStream inputStream = jarFile.getInputStream(jarEntry)
@@ -155,4 +158,22 @@ class PlatformSettings {
     }
   }
 
+}
+
+class PlatformEditionNameFilter implements FilenameFilter {
+
+  private String name;
+
+  PlatformEditionNameFilter (String name) {
+    this.name = name
+  }
+
+  @Override
+  boolean accept(File file, String s) {
+    println (file.getName())
+    println(name)
+    if(!file)
+      return false
+    return file.getName().contains(name)
+  }
 }
