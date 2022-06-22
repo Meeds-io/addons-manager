@@ -134,46 +134,27 @@ class PlatformSettings {
     }
     this.librariesDirectory.eachFile(findFilenameClosure)
     if (fileFound == null) {
-      throw new ErroneousSetupException(
-          "Erroneous setup, Unable to find edition jar in ${librariesDirectory}")
+      throw new ErroneousSetupException("Erroneous setup, Unable to find edition jar in ${librariesDirectory}")
     } else {
-      if (fileFound.contains("plf-enterprise-edition-service")){ // eXo EE
-        this.distributionType = DistributionType.ENTERPRISE
-      } else if (fileFound.contains("plf-community-edition-service")) { // Meeds
-        this.distributionType = DistributionType.COMMUNITY
-      } else if (fileFound.contains("platform-community-edition-service")) { // eXo CE
-        this.distributionType = DistributionType.EXO_COMMUNITY
-      } else {
-        this.distributionType = DistributionType.UNKNOWN
-      }
-      if (DistributionType.UNKNOWN.equals(this.distributionType)) {
-        throw new ErroneousSetupException("Erroneous setup, cannot compute the distribution type.")
-      }
       JarFile jarFile = new JarFile(fileFound)
       JarEntry jarEntry = jarFile.getJarEntry("conf/platform.properties")
       InputStream inputStream = jarFile.getInputStream(jarEntry)
       Properties platformProperties = new Properties()
       platformProperties.load(inputStream)
       this.version = platformProperties.getProperty("product.version")
+      try {
+        String distributionTypeFromProps = platformProperties.getProperty("product.distributionType")
+        if(!distributionTypeFromProps) {
+          this.distributionType = DistributionType.UNKNOWN
+        }
+        this.distributionType = DistributionType.valueOf(distributionTypeFromProps.toUpperCase())
+      } catch (IllegalArgumentException e) {
+        // Could not determine the distribution type
+      }
+      if (DistributionType.UNKNOWN == this.distributionType) {
+        throw new ErroneousSetupException("Erroneous setup, cannot compute the distribution type.")
+      }
     }
   }
 
-}
-
-class PlatformEditionNameFilter implements FilenameFilter {
-
-  private String name;
-
-  PlatformEditionNameFilter (String name) {
-    this.name = name
-  }
-
-  @Override
-  boolean accept(File file, String s) {
-    println (file.getName())
-    println(name)
-    if(!file)
-      return false
-    return file.getName().contains(name)
-  }
 }
