@@ -50,16 +50,10 @@ class PlatformSettings {
     }
   }
 
-  /**
-   * Distribution types on which PLF add-ons can be managed
-   */
-  enum DistributionType {
-    COMMUNITY, ENTERPRISE, UNKNOWN, EXO_COMMUNITY
-  }
 
   File homeDirectory
   AppServerType appServerType
-  DistributionType distributionType
+  String distributionType
   String version
   File librariesDirectory
   File webappsDirectory
@@ -145,14 +139,11 @@ class PlatformSettings {
       try {
         String distributionTypeFromProps = platformProperties.getProperty("product.distributionType")
         if(!distributionTypeFromProps) {
-          this.distributionType = DistributionType.UNKNOWN
+          throw new ErroneousSetupException("Erroneous setup, distribution type is missing.")
         }
-        this.distributionType = DistributionType.valueOf(distributionTypeFromProps.toUpperCase())
+        this.distributionType = distributionTypeFromProps
       } catch (IllegalArgumentException e) {
         // Could not determine the distribution type
-      }
-      if (DistributionType.UNKNOWN == this.distributionType) {
-        throw new ErroneousSetupException("Erroneous setup, cannot compute the distribution type.")
       }
     }
   }
