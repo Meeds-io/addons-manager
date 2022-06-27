@@ -43,13 +43,4 @@ class PlatformSettingsIT extends IntegrationTestsSpecification {
     expect:
     expectedAppServerType == getPlatformSettings().appServerType
   }
-
-  def "Validate Distribution Type"() {
-    setup:
-    def expectedDistributionType =
-        getPlatformHome().name.contains("community") ?
-            PlatformSettings.DistributionType.COMMUNITY : PlatformSettings.DistributionType.ENTERPRISE
-    expect:
-    expectedDistributionType == getPlatformSettings().distributionType
-  }
 }
