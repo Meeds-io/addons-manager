@@ -555,6 +555,8 @@ class AddonService {
     addonObj.supported = anAddon.supported
     if (anAddon.supportedDistributions instanceof String) {
       addonObj.supportedDistributions = Arrays.asList(anAddon.supportedDistributions.split(','))
+    } else {
+      addonObj.supportedDistributions = anAddon.supportedDistributions
     }
     if (anAddon.supportedApplicationServers instanceof String) {
       addonObj.supportedApplicationServers = anAddon.supportedApplicationServers.split(',').collect {
