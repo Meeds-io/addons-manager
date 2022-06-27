@@ -440,7 +440,7 @@ class AddonService {
    * @return true is the add-on is compatible
    */
   protected Boolean isCompatible(Addon addon, PlatformSettings plfSettings) {
-    return addon.supportedDistributions.contains(plfSettings.distributionType) &&
+    return addon.supportedDistributions.contains(plfSettings.distributionType.toLowerCase()) &&
         testAppServerTypeCompatibility(plfSettings.appServerType, addon.supportedApplicationServers) &&
         testVersionCompatibility(plfSettings.version, addon.compatibility)
   }
@@ -554,27 +554,10 @@ class AddonService {
     addonObj.mustAcceptLicense = anAddon.mustAcceptLicense
     addonObj.supported = anAddon.supported
     if (anAddon.supportedDistributions instanceof String) {
-      addonObj.supportedDistributions = anAddon.supportedDistributions.split(',').collect {
-        String it ->
-          try {
-            PlatformSettings.DistributionType.valueOf(it.trim().toUpperCase())
-          } catch (IllegalArgumentException iae) {
-            errors.addMalformed("${addonObj.id}:${addonObj.version}", "Unknown distribution type <${it}>")
-            PlatformSettings.DistributionType.UNKNOWN
-          }
-      }
+      addonObj.supportedDistributions = Arrays.asList(anAddon.supportedDistributions.split(','))
     } else {
-      addonObj.supportedDistributions = anAddon.supportedDistributions ? anAddon.supportedDistributions.collect {
-        String it ->
-          try {
-            PlatformSettings.DistributionType.valueOf(it.trim().toUpperCase())
-          } catch (IllegalArgumentException iae) {
-            errors.addMalformed("${addonObj.id}:${addonObj.version}", "Unknown distribution type <${it}>")
-            PlatformSettings.DistributionType.UNKNOWN
-          }
-      } : []
+      addonObj.supportedDistributions = anAddon.supportedDistributions
     }
-    addonObj.supportedDistributions.removeAll(PlatformSettings.DistributionType.UNKNOWN)
     if (anAddon.supportedApplicationServers instanceof String) {
       addonObj.supportedApplicationServers = anAddon.supportedApplicationServers.split(',').collect {
         String it ->
@@ -671,7 +654,7 @@ class AddonService {
     if (addonObj.supportedApplicationServers.size() == 0) {
       errors.addInvalid("${addonObj.id}:${addonObj.version}", "No supportedApplicationServers")
     }
-    if (addonObj.supportedDistributions.size() == 0) {
+    if (!addonObj.supportedDistributions || addonObj.supportedDistributions.size() == 0) {
       errors.addInvalid("${addonObj.id}:${addonObj.version}", "No supportedDistributions")
     }
     // Reject it only it is marked as invalid
