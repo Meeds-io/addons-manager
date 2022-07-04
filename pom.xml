@@ -61,8 +61,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <!-- Build/Tests settings -->
     <!-- **************************************** -->
     <!-- The add-ons manager must be compliant with PLF 4.0.x running on Java 6 -->
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
     <ut.verbose>false</ut.verbose>
     <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
     <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
