@@ -70,6 +70,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <it.dataDirPath>${project.build.directory}/test-data</it.dataDirPath>
     <it.workingDirPath>${project.build.directory}/integration-tests</it.workingDirPath>
     <it.verbose>false</it.verbose>
+    <!-- Unit tests coverage ratio -->
+    <exo.test.coverage.ratio>0.2</exo.test.coverage.ratio>
   </properties>
   <dependencies>
     <dependency>
