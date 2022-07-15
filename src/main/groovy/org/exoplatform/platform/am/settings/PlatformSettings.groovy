@@ -50,16 +50,10 @@ class PlatformSettings {
     }
   }
 
-  /**
-   * Distribution types on which PLF add-ons can be managed
-   */
-  enum DistributionType {
-    COMMUNITY, ENTERPRISE, UNKNOWN
-  }
 
   File homeDirectory
   AppServerType appServerType
-  DistributionType distributionType
+  String distributionType
   String version
   File librariesDirectory
   File webappsDirectory
@@ -108,15 +102,6 @@ class PlatformSettings {
       throw new ErroneousSetupException("Erroneous setup, cannot compute the application server type.")
     }
 
-    if (new File(homeDirectory, "eXo_Subscription_Agreement_US.pdf").exists()) {
-      this.distributionType = DistributionType.ENTERPRISE
-    } else {
-      this.distributionType = DistributionType.COMMUNITY
-    }
-    if (DistributionType.UNKNOWN.equals(this.distributionType)) {
-      throw new ErroneousSetupException("Erroneous setup, cannot compute the distribution type.")
-    }
-
     this.librariesDirectory = new File(homeDirectory, this.appServerType.librariesPath)
     if (!this.librariesDirectory.isDirectory()) {
       throw new ErroneousSetupException("Erroneous setup, platform libraries directory (${this.librariesDirectory}) is invalid.")
@@ -134,7 +119,7 @@ class PlatformSettings {
           "Erroneous setup, platform properties directory (${this.propertiesDirectory}) is invalid.")
     }
 
-    Pattern filePattern = ~/plf.*-edition-.*jar/
+    Pattern filePattern = ~/.*-edition-service.*jar/
     String fileFound
     Closure findFilenameClosure = {
       if (filePattern.matcher(it.name).find()) {
@@ -143,8 +128,7 @@ class PlatformSettings {
     }
     this.librariesDirectory.eachFile(findFilenameClosure)
     if (fileFound == null) {
-      throw new ErroneousSetupException(
-          "Erroneous setup, Unable to find edition jar in ${librariesDirectory}")
+      throw new ErroneousSetupException("Erroneous setup, Unable to find edition jar in ${librariesDirectory}")
     } else {
       JarFile jarFile = new JarFile(fileFound)
       JarEntry jarEntry = jarFile.getJarEntry("conf/platform.properties")
@@ -152,6 +136,15 @@ class PlatformSettings {
       Properties platformProperties = new Properties()
       platformProperties.load(inputStream)
       this.version = platformProperties.getProperty("product.version")
+      try {
+        String distributionTypeFromProps = platformProperties.getProperty("product.distributionType")
+        if(!distributionTypeFromProps) {
+          throw new ErroneousSetupException("Erroneous setup, distribution type is missing.")
+        }
+        this.distributionType = distributionTypeFromProps
+      } catch (IllegalArgumentException e) {
+        // Could not determine the distribution type
+      }
     }
   }
 
