@@ -29,8 +29,6 @@ import static java.lang.Boolean.TRUE
 import static org.exoplatform.platform.am.settings.PlatformSettings.AppServerType.JBOSS
 import static org.exoplatform.platform.am.settings.PlatformSettings.AppServerType.TOMCAT
 import static org.exoplatform.platform.am.settings.PlatformSettings.AppServerType.BITNAMI
-import static org.exoplatform.platform.am.settings.PlatformSettings.DistributionType.COMMUNITY
-import static org.exoplatform.platform.am.settings.PlatformSettings.DistributionType.ENTERPRISE
 
 /**
  * @author Arnaud Héritier <aheritier@exoplatform.com>
@@ -53,31 +51,31 @@ class AddonServiceTest extends UnitTestsSpecification {
   PlatformSettings plfEnterpriseBitnami41
   @Shared
   Addon addon1 = new Addon(id: "addon1", version: "42", supportedApplicationServers: [TOMCAT],
-                           supportedDistributions: [COMMUNITY],
+                           supportedDistributions: ["community"],
                            compatibility: "[4.1,)")
   @Shared
   Addon addon2 = new Addon(id: "addon2", version: "42", supportedApplicationServers: [TOMCAT],
-                           supportedDistributions: [ENTERPRISE],
+                           supportedDistributions: ["enterprise"],
                            compatibility: "[4.1,)")
   @Shared
   Addon addon3 = new Addon(id: "addon3", version: "42", supportedApplicationServers: [JBOSS],
-                           supportedDistributions: [ENTERPRISE],
+                           supportedDistributions: ["enterprise"],
                            compatibility: "[4.1,)")
   @Shared
   Addon addon4 = new Addon(id: "addon4", version: "42", supportedApplicationServers: [TOMCAT],
-                           supportedDistributions: [COMMUNITY],
+                           supportedDistributions: ["community"],
                            compatibility: "[4.2,)")
   @Shared
   Addon addon5 = new Addon(id: "addon5", version: "42", supportedApplicationServers: [TOMCAT],
-                           supportedDistributions: [ENTERPRISE],
+                           supportedDistributions: ["enterprise"],
                            compatibility: "[4.2,)")
   @Shared
   Addon addon6 = new Addon(id: "addon6", version: "42", supportedApplicationServers: [JBOSS],
-                           supportedDistributions: [ENTERPRISE],
+                           supportedDistributions: ["enterprise"],
                            compatibility: "[4.2,)")
   @Shared
   Addon addon7 = new Addon(id: "addon7", version: "42", supportedApplicationServers: [TOMCAT, JBOSS],
-                           supportedDistributions: [ENTERPRISE, COMMUNITY],
+                           supportedDistributions: ["enterprise", "community"],
                            compatibility: "[4.1,)")
   @Shared
   Addon addon_42_beta_01 = new Addon(id: "addon", version: "42-beta-01", unstable: true)
@@ -103,24 +101,24 @@ class AddonServiceTest extends UnitTestsSpecification {
   def setupSpec() {
     plfCommunityTomcat41 = Mock()
     plfCommunityTomcat41.appServerType >> TOMCAT
-    plfCommunityTomcat41.distributionType >> COMMUNITY
+    plfCommunityTomcat41.distributionType >> "community"
     plfCommunityTomcat41.version >> "4.1.0"
     plfEnterpriseTomcat41 = Mock()
     plfEnterpriseTomcat41.appServerType >> TOMCAT
-    plfEnterpriseTomcat41.distributionType >> ENTERPRISE
+    plfEnterpriseTomcat41.distributionType >> "enterprise"
     plfEnterpriseTomcat41.version >> "4.1.0"
     plfEnterpriseJboss41 = Mock()
     plfEnterpriseJboss41.appServerType >> JBOSS
-    plfEnterpriseJboss41.distributionType >> ENTERPRISE
+    plfEnterpriseJboss41.distributionType >> "enterprise"
     plfEnterpriseJboss41.version >> "4.1.0"
     
     plfCommunityBitnami41 = Mock()
     plfCommunityBitnami41.appServerType >> BITNAMI
-    plfCommunityBitnami41.distributionType >> COMMUNITY
+    plfCommunityBitnami41.distributionType >> "community"
     plfCommunityBitnami41.version >> "4.1.0"
     plfEnterpriseBitnami41 = Mock()
     plfEnterpriseBitnami41.appServerType >> BITNAMI
-    plfEnterpriseBitnami41.distributionType >> ENTERPRISE
+    plfEnterpriseBitnami41.distributionType >> "enterprise"
     plfEnterpriseBitnami41.version >> "4.1.0"    
   }
 
@@ -187,23 +185,6 @@ class AddonServiceTest extends UnitTestsSpecification {
     thrown(InvalidJSONException)
   }
 
-  def "createAddonFromJsonText parse an invalid JSON text containing İ in Turkish"() {
-    when:
-    addonService.createAddonFromJsonText("""
-    {
-        "id": "my-addon",
-        "version": "1.0.0",
-        "name": "The super add-on Turkish",
-        "downloadUrl": "http://path/to/archive.zip",
-        "vendor": "eXo platform",
-        "license": "LGPLv3",
-        "supportedDistributions": "ENTERPRİSE,COMMUNİTY",
-        "supportedApplicationServers": "TOMCAT,JBOSS"
-    }
-""")
-    then:
-    thrown(InvalidJSONException)
-  }
 
   def "createAddonsFromJsonText must silently ignore all invalid entries"() {
     when:
