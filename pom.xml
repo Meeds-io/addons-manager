@@ -66,7 +66,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <ut.verbose>false</ut.verbose>
     <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
     <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
-    <io.meeds.distribution.version>1.4.x-meed-SNAPSHOT</io.meeds.distribution.version>
+    <io.meeds.distribution.version>1.4.0-meed-20220905</io.meeds.distribution.version>
     <it.dataDirPath>${project.build.directory}/test-data</it.dataDirPath>
     <it.workingDirPath>${project.build.directory}/integration-tests</it.workingDirPath>
     <it.verbose>false</it.verbose>
