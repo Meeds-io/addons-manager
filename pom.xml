@@ -180,20 +180,21 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
         </excludes>
       </resource>
     </resources>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <systemPropertyVariables>
-              <ut.verbose>${ut.verbose}</ut.verbose>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>com.jcabi</groupId>
+        <artifactId>jcabi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>weave-classes</id>
+            <phase />
+          </execution>
+          <execution>
+            <id>weave-test-classes</id>
+            <phase />
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
@@ -273,182 +274,4 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <!-- Integration tests -->
-    <profile>
-      <id>run-its</id>
-      <build>
-        <testResources>
-          <testResource>
-            <targetPath>${it.dataDirPath}</targetPath>
-            <filtering>true</filtering>
-            <directory>${project.basedir}/src/test/data</directory>
-            <includes>
-              <include>**/*.json</include>
-              <include>**/*.xml</include>
-            </includes>
-          </testResource>
-          <testResource>
-            <targetPath>${it.dataDirPath}</targetPath>
-            <filtering>false</filtering>
-            <directory>${project.basedir}/src/test/data</directory>
-            <excludes>
-              <exclude>**/*.json</exclude>
-            </excludes>
-          </testResource>
-        </testResources>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>reserve-network-port</id>
-                <phase>initialize</phase>
-                <goals>
-                  <goal>reserve-network-port</goal>
-                </goals>
-                <configuration>
-                  <portNames>
-                    <portName>it.webServerHttpPort</portName>
-                  </portNames>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>prepare-integration-tests</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>unpack-dependencies</goal>
-                </goals>
-                <configuration>
-                  <includeScope>test</includeScope>
-                  <includeTypes>zip</includeTypes>
-                  <outputDirectory>${it.workingDirPath}</outputDirectory>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.tomcat.maven</groupId>
-            <artifactId>tomcat7-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>start-tomcat</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>run-war-only</goal>
-                </goals>
-                <configuration>
-                  <fork>true</fork>
-                </configuration>
-              </execution>
-              <execution>
-                <id>stop-tomcat</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>shutdown</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <ignorePackaging>true</ignorePackaging>
-              <!-- Using a server.xml is the only way to be able to set cachingAllowed="false" on the context -->
-              <serverXml>${it.dataDirPath}/server.xml</serverXml>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                <it.dataDirPath>${it.dataDirPath}</it.dataDirPath>
-                <it.workingDirPath>${it.workingDirPath}</it.workingDirPath>
-                <it.jacocoAgent>${argLine}</it.jacocoAgent>
-                <it.platformVersion>${io.meeds.distribution.version}</it.platformVersion>
-                <it.testedArtifactPath>${project.build.directory}/${project.build.finalName}.jar</it.testedArtifactPath>
-                <it.verbose>${it.verbose}</it.verbose>
-                <it.webServerHttpPort>${it.webServerHttpPort}</it.webServerHttpPort>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-      <dependencies>
-        <dependency>
-          <groupId>${it.platform.groupId}</groupId>
-          <artifactId>${it.platform.artifactId}</artifactId>
-          <version>${io.meeds.distribution.version}</version>
-          <type>zip</type>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>platform-community-tomcat-its</id>
-      <activation>
-        <property>
-          <name>platform.distribution</name>
-          <value>platform-community-tomcat</value>
-        </property>
-      </activation>
-      <properties>
-        <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
-        <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
-      </properties>
-    </profile>
-    <!-- You need to have access to eXo private repositories to download these packages -->
-    <profile>
-      <id>platform-enterprise-tomcat-its</id>
-      <activation>
-        <property>
-          <name>platform.distribution</name>
-          <value>platform-enterprise-tomcat</value>
-        </property>
-      </activation>
-      <properties>
-        <it.platform.groupId>com.exoplatform.platform.distributions</it.platform.groupId>
-        <it.platform.artifactId>plf-enterprise-tomcat-standalone</it.platform.artifactId>
-      </properties>
-    </profile>
-    <profile>
-      <id>platform-enterprise-jbosseap-its</id>
-      <activation>
-        <property>
-          <name>platform.distribution</name>
-          <value>platform-enterprise-jbosseap</value>
-        </property>
-      </activation>
-      <properties>
-        <it.platform.groupId>com.exoplatform.platform.distributions</it.platform.groupId>
-        <it.platform.artifactId>plf-enterprise-jbosseap-standalone</it.platform.artifactId>
-      </properties>
-    </profile>
-    <profile>
-      <id>coverage</id>
-      <properties>
-        <!-- When using the maven-surefire-plugin or maven-failsafe-plugin you must not use a forkCount of 0
-        or set the forkMode to never as this would prevent the execution
-        of the tests with the javaagent set and no coverage would be recorded. -->
-        <forkCount>1</forkCount>
-      </properties>
-    </profile>
-    <profile>
-      <id>verbose-tests</id>
-      <activation>
-        <property>
-          <name>verboseTests</name>
-        </property>
-      </activation>
-      <properties>
-        <ut.verbose>true</ut.verbose>
-        <it.verbose>true</it.verbose>
-      </properties>
-    </profile>
-  </profiles>
 </project>
