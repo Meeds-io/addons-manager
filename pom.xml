@@ -22,7 +22,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <artifactId>maven-parent-pom</artifactId>
     <groupId>org.exoplatform</groupId>
     <version>27-M02</version>
-    <relativePath />
+    <relativePath/>
   </parent>
   <groupId>org.exoplatform.platform</groupId>
   <artifactId>addons-manager</artifactId>
@@ -48,7 +48,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <!-- Project Dependencies -->
     <!-- **************************************** -->
     <aether.version>1.1.0</aether.version>
-    <groovy.version>2.4.12</groovy.version>
+    <groovy.version>2.5.23</groovy.version>
     <jcommander.version>1.35</jcommander.version>
     <jline.version>2.12</jline.version>
     <!-- Tests dependencies -->
@@ -187,11 +187,11 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
         <executions>
           <execution>
             <id>weave-classes</id>
-            <phase />
+            <phase/>
           </execution>
           <execution>
             <id>weave-test-classes</id>
-            <phase />
+            <phase/>
           </execution>
         </executions>
       </plugin>
@@ -247,7 +247,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                 <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
               </manifestEntries>
             </transformer>
-            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
           </transformers>
         </configuration>
       </plugin>
