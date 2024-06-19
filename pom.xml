@@ -24,11 +24,11 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <version>27-M03</version>
     <relativePath />
   </parent>
-  <groupId>org.exoplatform.platform</groupId>
+  <groupId>io.meeds.platform</groupId>
   <artifactId>addons-manager</artifactId>
   <version>7.0.x-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>eXo Platform - Add-ons Manager</name>
+  <name>Meeds:: Platform - Add-ons Manager</name>
   <description>Command line utility to manage Platform add-ons</description>
   <scm>
     <connection>scm:git:git://github.com/exoplatform/addons-manager.git</connection>
@@ -234,7 +234,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
           <transformers>
             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
               <manifestEntries>
-                <Main-Class>org.exoplatform.platform.am.AddonsManager</Main-Class>
+                <Main-Class>io.meeds.platform.am.AddonsManager</Main-Class>
                 <Date>${maven.build.timestamp}</Date>
                 <Implementation-URL>${project.url}</Implementation-URL>
                 <SCM-URL>${project.scm.connection}</SCM-URL>
