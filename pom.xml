@@ -20,8 +20,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>maven-parent-pom</artifactId>
-    <groupId>org.exoplatform</groupId>
-    <version>27-M03</version>
+    <groupId>io.meeds</groupId>
+    <version>27-M04</version>
     <relativePath />
   </parent>
   <groupId>io.meeds.platform</groupId>
@@ -72,8 +72,6 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <it.verbose>false</it.verbose>
     <!-- Unit tests coverage ratio -->
     <exo.test.coverage.ratio>0.2</exo.test.coverage.ratio>
-
-    <exo.snapshots.repo.url>https://repository.exoplatform.org/content/repositories/meeds-snapshots</exo.snapshots.repo.url>
   </properties>
   <dependencies>
     <dependency>
