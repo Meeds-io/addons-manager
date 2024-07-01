@@ -20,15 +20,15 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>maven-parent-pom</artifactId>
-    <groupId>org.exoplatform</groupId>
-    <version>27-M03</version>
+    <groupId>io.meeds</groupId>
+    <version>27-M04</version>
     <relativePath />
   </parent>
-  <groupId>org.exoplatform.platform</groupId>
+  <groupId>io.meeds.platform</groupId>
   <artifactId>addons-manager</artifactId>
   <version>7.0.x-exo-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>eXo Platform - Add-ons Manager</name>
+  <name>Meeds:: Platform - Add-ons Manager</name>
   <description>Command line utility to manage Platform add-ons</description>
   <scm>
     <connection>scm:git:git://github.com/exoplatform/addons-manager.git</connection>
