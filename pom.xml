@@ -182,20 +182,6 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     </resources>
     <plugins>
       <plugin>
-        <groupId>com.jcabi</groupId>
-        <artifactId>jcabi-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>weave-classes</id>
-            <phase />
-          </execution>
-          <execution>
-            <id>weave-test-classes</id>
-            <phase />
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
         <executions>
