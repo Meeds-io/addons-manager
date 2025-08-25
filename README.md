@@ -1,9 +1,9 @@
-eXo platform add-ons manager
+add-ons manager
 ==============
 
 ## DESCRIPTION
 
-Command line tool for eXo platform 4.x to install/uninstall add-ons
+Command line tool to install/uninstall add-ons
 
 ## LICENSE
 
@@ -13,7 +13,6 @@ Command line tool for eXo platform 4.x to install/uninstall add-ons
 
 - [Java](http://www.oracle.com/technetwork/java/javase/downloads/) 6+ (Build & Run)
 - [Apache Maven](http://maven.apache.org) 3.0.4+ (Build)
-- [eXo platform](http://www.exoplatform.org/) 4.0.0+ (Run)
 
 ## RESOURCES
 
@@ -32,7 +31,7 @@ Command line tool for eXo platform 4.x to install/uninstall add-ons
 
     git clone git@github.com:exoplatform/addons-manager.git && mvn package
 
-Unpack the content of the generated archive ```target/addons-manager-VERSION.zip``` into you eXo platform installation directory
+Unpack the content of the generated archive ```target/addons-manager-VERSION.zip``` into you Platform installation directory
 and then use the script ```addon.bat``` on windows systems and ```addon``` on linux/unix systems.
 
 ## Usage

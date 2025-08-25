@@ -426,7 +426,7 @@ class AddonService {
    * @throws CompatibilityException if the add-on isn't compatible
    */
   protected void validateCompatibility(Addon addon, PlatformSettings plfSettings) throws CompatibilityException {
-    LOG.withStatus("Checking compatibility of the add-on with your eXo platform instance") {
+    LOG.withStatus("Checking compatibility of the add-on with your Platform instance") {
       if (!isCompatible(addon, plfSettings)) {
         throw new CompatibilityException(addon, plfSettings)
       }

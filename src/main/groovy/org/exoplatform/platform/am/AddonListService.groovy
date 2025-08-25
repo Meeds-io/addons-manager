@@ -116,7 +116,7 @@ public class AddonListService {
           LOG.infoHR()
       }
       if (displayIncompatibleAddonsNote) {
-        LOG.info " @|red,bold (*)|@ Your eXo Platform instance is not compatible with this version of the add-on"
+        LOG.info " @|red,bold (*)|@ Your Platform instance is not compatible with this version of the add-on"
       }
       LOG.info String.format("""
 To uninstall an add-on:
@@ -206,7 +206,7 @@ To uninstall an add-on:
           LOG.infoHR()
         }
         if (displayIncompatibleAddonsNote) {
-          LOG.info " @|red,bold (*)|@ Your eXo Platform instance is not compatible with this version of the add-on"
+          LOG.info " @|red,bold (*)|@ Your Platform instance is not compatible with this version of the add-on"
         }
         LOG.info String.format("""
     To update an add-on:
@@ -279,7 +279,7 @@ To uninstall an add-on:
         LOG.infoHR()
       }
       if (displayIncompatibleAddonsNote) {
-        LOG.info " @|red,bold (*)|@ Your eXo Platform instance is not compatible with this version of the add-on"
+        LOG.info " @|red,bold (*)|@ Your Platform instance is not compatible with this version of the add-on"
       }
       LOG.info String.format("""
 To install an add-on:
