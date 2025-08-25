@@ -675,7 +675,7 @@ class AddonsManagerInstallIT extends IntegrationTestsSpecification {
   /**
    * The add-ons manager does a compatibility check using the compatibility values prior to install an add-on. If the add-on is
    * not compatible, the installation interrupts with an error : "The add-on foo-addon:version is not compatible with your
-   * version of eXo Platform. Use --no-compat to ignore this compatibility check and install anyway.
+   * version of Platform. Use --no-compat to ignore this compatibility check and install anyway.
    */
   def "[AM_INST_09] The add-ons manager does a compatibility check using the compatibility values prior to install an add-on."() {
     setup:

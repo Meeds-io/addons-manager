@@ -104,7 +104,7 @@ public class AddonDescribeService {
           return "${version}${compatibility}"
         })
     if (displayIncompatibleAddonsNote) {
-      LOG.info " @|red,bold (*)|@ Your eXo Platform instance is not compatible with this version of the add-on"
+      LOG.info " @|red,bold (*)|@ Your Platform instance is not compatible with this version of the add-on"
     }
     String compat_opt = ADDON_SERVICE.isCompatible(addon, env.platform) ? "" : "@|red --no-compat|@"
     LOG.info String.format("""

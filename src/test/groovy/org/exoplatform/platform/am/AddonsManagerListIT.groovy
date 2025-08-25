@@ -208,10 +208,10 @@ class AddonsManagerListIT extends IntegrationTestsSpecification {
   /**
    * Unless --no-compat option is passed, the list is filtered to match the app server  with supportedApplicationServers.
    * Example : if supportedApplicationServers contains tomcat and the app server is JBoss, the entry will not be listed
-   * Unless --no-compat option is passed, the list is filtered to match the eXo Platform edition with supportedDistributions.
-   * Example : if supportedDistributions contains enterprise, the entry will not be listed on a eXo Platform Community Edition.
-   * Unless --no-compat option is passed, the list is filtered to match the eXo Platform version with compatibility.
-   * Example : if compatibility contains [4.1-M2,), the entry will not be listed on a eXo Platform 4.0
+   * Unless --no-compat option is passed, the list is filtered to match the Platform edition with supportedDistributions.
+   * Example : if supportedDistributions contains enterprise, the entry will not be listed on a Platform Community Edition.
+   * Unless --no-compat option is passed, the list is filtered to match the Platform version with compatibility.
+   * Example : if compatibility contains [4.1-M2,), the entry will not be listed
    */
   def "[AM_LIST_10] [AM_LIST_11] [AM_LIST_12] addon(.bat) list --no-compat"() {
     setup:
