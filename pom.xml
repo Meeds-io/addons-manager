@@ -27,7 +27,7 @@
   </parent>
   <groupId>io.meeds.platform</groupId>
   <artifactId>addons-manager</artifactId>
-  <version>7.1.x-meed-SNAPSHOT</version>
+  <version>7.2.x-meed-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Meeds:: Platform - Add-ons Manager</name>
   <description>Command line utility to manage Platform add-ons</description>
@@ -67,7 +67,7 @@
     <ut.verbose>false</ut.verbose>
     <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
     <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
-    <io.meeds.distribution.version>7.1.x-meed-SNAPSHOT</io.meeds.distribution.version>
+    <io.meeds.distribution.version>7.2.x-meed-SNAPSHOT</io.meeds.distribution.version>
     <it.dataDirPath>${project.build.directory}/test-data</it.dataDirPath>
     <it.workingDirPath>${project.build.directory}/integration-tests</it.workingDirPath>
     <it.verbose>false</it.verbose>
