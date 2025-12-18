@@ -27,14 +27,14 @@
   </parent>
   <groupId>io.meeds.platform</groupId>
   <artifactId>addons-manager</artifactId>
-  <version>7.2.0-exo-20251215</version>
+  <version>7.2.x-exo-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Meeds:: Platform - Add-ons Manager</name>
   <description>Command line utility to manage Platform add-ons</description>
   <scm>
     <connection>scm:git:git://github.com/exoplatform/addons-manager.git</connection>
     <developerConnection>scm:git:git@github.com:exoplatform/addons-manager.git</developerConnection>
-    <tag>7.2.0-exo-20251215</tag>
+    <tag>HEAD</tag>
   </scm>
   <properties>
     <!-- **************************************** -->
@@ -67,7 +67,7 @@
     <ut.verbose>false</ut.verbose>
     <it.platform.groupId>io.meeds.distribution</it.platform.groupId>
     <it.platform.artifactId>plf-community-tomcat-standalone</it.platform.artifactId>
-    <io.meeds.distribution.version>7.2.0-exo-20251215</io.meeds.distribution.version>
+    <io.meeds.distribution.version>7.2.x-exo-SNAPSHOT</io.meeds.distribution.version>
     <it.dataDirPath>${project.build.directory}/test-data</it.dataDirPath>
     <it.workingDirPath>${project.build.directory}/integration-tests</it.workingDirPath>
     <it.verbose>false</it.verbose>
