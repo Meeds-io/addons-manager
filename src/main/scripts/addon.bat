@@ -132,6 +132,12 @@ set JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/sun.net.www.protocol.https=ALL-U
 set JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/sun.net.www.protocol.jar=ALL-UNNAMED
 set JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
 set JAVA_OPTS=%JAVA_OPTS% --add-opens=java.base/sun.security.util=ALL-UNNAMED
+
+rem Inject ADDONSMGR_PROPERTIES if defined
+if defined ADDONSMGR_PROPERTIES (
+  set JAVA_OPTS=%JAVA_OPTS% %ADDONSMGR_PROPERTIES%
+)
+
 %_RUNJAVA% %JAVA_OPTS% -jar "%PLF_HOME%\addons\addons-manager.jar" %CMD_LINE_ARGS%
 goto end
 
