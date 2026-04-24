@@ -29,7 +29,9 @@ Command line tool to install/uninstall add-ons
 
 ## QUICKSTART
 
-    git clone git@github.com:exoplatform/addons-manager.git && mvn package
+```bash
+git clone git@github.com:Meeds-io/addons-manager.git && mvn package
+```
 
 Unpack the content of the generated archive ```target/addons-manager-VERSION.zip``` into you Platform installation directory
 and then use the script ```addon.bat``` on windows systems and ```addon``` on linux/unix systems.
@@ -38,68 +40,181 @@ and then use the script ```addon.bat``` on windows systems and ```addon``` on li
 
 We are using ```addon``` in our samples. If you are on a windows system, just use ```addon.bat``` instead.
 
+### Basic Commands
+
 Display all available addons :
 
-    addon list
+```bash
+addon list
+```
 
 Display all available addons including development versions (snapshots) :
 
-    addon list --snapshots
+```bash
+addon list --snapshots
+```
 
 Display all available addons including unstable versions (alpha, beta, ...) :
 
-    addon list --unstable
+```bash
+addon list --unstable
+```
 
 Display all installed addons in your platform server :
 
-    addon list --installed
+```bash
+addon list --installed
+```
 
 Display all installed addons with an existing more recent stable version :
 
-    addon list --outdated
+```bash
+addon list --outdated
+```
 
 Display all installed addons with an existing more recent stable or snapshot version :
 
-    addon list --outdated  --snapshots
+```bash
+addon list --outdated  --snapshots
+```
 
 Display all installed addons with an existing more recent stable or unstable version :
 
-    addon list --outdated --unstable
+```bash
+addon list --outdated --unstable
+```
 
 Install the latest stable version of the add-on ```foo```
 
-    addon install foo
+```bash
+addon install foo
+```
 
 Install the latest stable or development version of the add-on ```foo```
 
-    addon install foo --snapshots
+```bash
+addon install foo --snapshots
+```
 
 Install the latest stable or unstable version of the add-on ```foo```
 
-    addon install foo --unstable
+```bash
+addon install foo --unstable
+```
 
 Install the version ```42.0``` of the add-on ```foo```
 
-    addon install foo:42.0
+```bash
+addon install foo:42.0
+```
 
 Enforce to reinstall the latest stable version of the add-on ```foo```
 
-    addon install foo --force
+```bash
+addon install foo --force
+```
 
 Uninstall the add-on ```foo```
 
-    addon uninstall foo
+```bash
+addon uninstall foo
+```
+
+### Authentication
+
+The add-ons manager supports authentication for accessing protected catalogs or add-on repositories. Authentication can be configured using the ```ADDONSMGR_PROPERTIES``` environment variable.
+
+#### Basic Authentication
+
+To use basic authentication, set the following system properties:
+
+- ```addonsmgr.auth.type=basic```
+- ```addonsmgr.auth.username=<your-username>```
+- ```addonsmgr.auth.password=<your-password>```
+
+**Linux/Mac (bash):**
+```bash
+export ADDONSMGR_PROPERTIES="-Daddonsmgr.auth.type=basic -Daddonsmgr.auth.username=myuser -Daddonsmgr.auth.password=mypass"
+./addon list
+```
+
+With special characters in password:
+```bash
+export ADDONSMGR_PROPERTIES="-Daddonsmgr.auth.type=basic -Daddonsmgr.auth.username=myuser -Daddonsmgr.auth.password='p@ssw0rd!@#\$%'"
+./addon list
+```
+
+**Windows (Command Prompt):**
+```bash
+set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.type=basic -Daddonsmgr.auth.username=myuser -Daddonsmgr.auth.password=mypass
+addon.bat list
+```
+
+With spaces in username or password:
+```bash
+set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.type=basic -Daddonsmgr.auth.username="my user" -Daddonsmgr.auth.password="my pass"
+addon.bat list
+```
+
+#### Bearer Token Authentication
+
+To use bearer token authentication, set the following system properties:
+
+- ```addonsmgr.auth.type=bearer```
+- ```addonsmgr.auth.token=<your-token>```
+
+**Linux/Mac (bash):**
+```bash
+export ADDONSMGR_PROPERTIES="-Daddonsmgr.auth.type=bearer -Daddonsmgr.auth.token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+./addon list
+```
+
+**Windows (Command Prompt):**
+```bash
+set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.type=bearer -Daddonsmgr.auth.token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+addon.bat list
+```
+
+#### Multiple Properties
+
+You can combine multiple system properties in the ```ADDONSMGR_PROPERTIES``` variable:
+
+**Linux/Mac:**
+```bash
+export ADDONSMGR_PROPERTIES="-Daddonsmgr.auth.type=basic -Daddonsmgr.auth.username=user -Daddonsmgr.auth.password=pass -Dcustom.property=value"
+./addon list
+```
+
+**Windows:**
+```bash
+set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.type=basic -Daddonsmgr.auth.username=user -Daddonsmgr.auth.password=pass -Dcustom.property=value
+addon.bat list
+```
+
+#### Notes
+
+- Authentication is optional and only applied when the ```ADDONSMGR_PROPERTIES``` environment variable is set
+- The authentication type is case-insensitive (both "basic" and "BASIC" work)
+- For basic authentication, both username and password must be provided
+- For bearer authentication, the token must be provided
+- If authentication is configured but credentials are missing, the download will fail with an appropriate error message
 
 ## BUILD (AND AUTOMATED TESTS)
 
 To build the project you launch
 
-    mvn verify
+```bash
+mvn verify
+```
 
 You can additionally activate the execution of integration tests with
 
-    mvn verify -Prun-its
+```bash
+mvn verify -Prun-its
+```
 
 To deactivate all automated tests
 
-    mvn verify -DskipTests
+```bash
+mvn verify -DskipTests
+```

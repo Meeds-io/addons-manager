@@ -20,6 +20,7 @@ import org.exoplatform.platform.am.ex.AddonsManagerException
 import org.exoplatform.platform.am.ex.UnknownErrorException
 
 import java.nio.channels.FileChannel
+import java.util.Base64
 
 /**
  * Miscellaneous utilities
@@ -30,6 +31,94 @@ class FileUtils {
    * Logger
    */
   private static final Logger LOG = Logger.getInstance()
+  
+  /**
+   * System property prefix for authentication
+   */
+  private static final String AUTH_PREFIX = "addonsmgr.auth."
+  
+  /**
+   * Authentication types
+   */
+  private static final String AUTH_TYPE_BASIC = "basic"
+  private static final String AUTH_TYPE_BEARER = "bearer"
+  
+  /**
+   * Get authentication type from system properties
+   */
+  private static String getAuthType() {
+    return System.getProperty("${AUTH_PREFIX}type")
+  }
+  
+  /**
+   * Get username from system properties
+   */
+  private static String getAuthUsername() {
+    return System.getProperty("${AUTH_PREFIX}username")
+  }
+  
+  /**
+   * Get password from system properties
+   */
+  private static String getAuthPassword() {
+    return System.getProperty("${AUTH_PREFIX}password")
+  }
+  
+  /**
+   * Get bearer token from system properties
+   */
+  private static String getAuthToken() {
+    return System.getProperty("${AUTH_PREFIX}token")
+  }
+  
+  /**
+   * Apply authentication to URL connection if configured
+   * @param conn The URL connection to apply authentication to
+   */
+  private static void applyAuthentication(URLConnection conn) {
+    if (!(conn instanceof HttpURLConnection)) {
+      return
+    }
+    
+    String authType = getAuthType()
+    if (!authType) {
+      // No authentication configured
+      return
+    }
+    
+    HttpURLConnection httpConn = (HttpURLConnection) conn
+    
+    switch (authType.toLowerCase()) {
+      case AUTH_TYPE_BASIC:
+        String username = getAuthUsername()
+        String password = getAuthPassword()
+        
+        if (username && password) {
+          String auth = "${username}:${password}"
+          String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes("UTF-8"))
+          httpConn.setRequestProperty("Authorization", "Basic ${encodedAuth}")
+          LOG.debug("Applied Basic authentication for user: ${username}")
+        } else if (username || password) {
+          LOG.warn("Basic authentication configured but username or password missing. Please set -D${AUTH_PREFIX}username and -D${AUTH_PREFIX}password")
+        }
+        break
+        
+      case AUTH_TYPE_BEARER:
+        String token = getAuthToken()
+        
+        if (token) {
+          httpConn.setRequestProperty("Authorization", "Bearer ${token}")
+          LOG.debug("Applied Bearer token authentication")
+        } else {
+          LOG.warn("Bearer authentication configured but token missing. Please set -D${AUTH_PREFIX}token")
+        }
+        break
+        
+      default:
+        LOG.warn("Unsupported authentication type: ${authType}. Supported types: ${AUTH_TYPE_BASIC}, ${AUTH_TYPE_BEARER}")
+        break
+    }
+  }
 
   /**
    * Downloads a file following redirects if required
@@ -56,6 +145,9 @@ class FileUtils {
       new URL(url).openConnection().with { URLConnection conn ->
         if (conn instanceof HttpURLConnection) {
           conn.instanceFollowRedirects = true
+          
+          // Apply authentication if configured (optional)
+          applyAuthentication(conn)
         }
         url = conn.getHeaderField("Location")
         // No more Location, let's download
