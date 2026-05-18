@@ -175,6 +175,49 @@ set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.type=bearer -Daddonsmgr.auth.token=eyJ
 addon.bat list
 ```
 
+#### JSON-based Credentials File
+
+For more complex scenarios, such as multiple servers with different credentials, you can use a JSON-based credentials file. This file supports URL regex matching and environment variable interpolation.
+
+To use a credentials file, set the following system property:
+
+- ```addonsmgr.auth.credentials.file=<path-to-json-file>```
+
+**Example JSON file:**
+```json
+[
+  {
+    "url": "https://repository.exoplatform.org/.*",
+    "type": "basic",
+    "username": "user1",
+    "password": "${USER1_PASSWORD}"
+  },
+  {
+    "url": "https://other.server.com/api/.*",
+    "type": "bearer",
+    "token": "${OTHER_TOKEN}"
+  }
+]
+```
+
+**Linux/Mac (bash):**
+```bash
+export ADDONSMGR_PROPERTIES="-Daddonsmgr.auth.credentials.file=/path/to/credentials.json"
+./addon list
+```
+
+**Windows (Command Prompt):**
+```bash
+set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.credentials.file=C:\\path\\to\\credentials.json
+addon.bat list
+```
+
+**Notes on JSON format:**
+- The file can be a JSON array or a JSON object with a `credentials` property containing the array.
+- `url`: A string or a regex pattern to match the download URL.
+- `type`: `basic` or `bearer`.
+- `${VAR_NAME}`: Will be replaced by the value of the environment variable `VAR_NAME`.
+
 #### Multiple Properties
 
 You can combine multiple system properties in the ```ADDONSMGR_PROPERTIES``` variable:

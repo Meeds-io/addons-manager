@@ -257,20 +257,92 @@ class FileUtilsIT extends IntegrationTestsSpecification {
     setup:
     def originalFile = new File(getTestDataDir(), "catalog.json")
     def downloadedFile = File.createTempFile("test", ".json")
-    
+
     // Set authentication properties
     System.setProperty("addonsmgr.auth.type", "basic")
     System.setProperty("addonsmgr.auth.username", "testuser")
     System.setProperty("addonsmgr.auth.password", "testpass")
-    
+
     when:
     // This should work even with auth properties set because it's a local file
     FileUtils.copyFile("Testing copy without auth", originalFile, downloadedFile)
-    
+
     then:
     originalFile.text.equals(downloadedFile.text)
-    
+
     cleanup:
     downloadedFile.delete()
   }
-}
+
+  def "[AM_AUTH_10] Download with credentials from JSON file should work"() {
+    setup:
+    def originalFile = new File(getTestDataDir(), "catalog.json")
+    def downloadedFile = File.createTempFile("test", ".json")
+
+    // Create credentials file
+    File credFile = File.createTempFile("credentials", ".json")
+    credFile.text = """
+    [
+      {
+        "url": "${getWebServerRootUrl()}/protected-catalog.json",
+        "type": "basic",
+        "username": "testuser",
+        "password": "testpass"
+      }
+    ]
+    """
+    System.setProperty("addonsmgr.auth.credentials.file", credFile.absolutePath)
+    FileUtils.CREDENTIALS_SERVICE.reload()
+
+    when:
+    FileUtils.downloadFile("Testing download with JSON credentials", 
+                          "${getWebServerRootUrl()}/protected-catalog.json", 
+                          downloadedFile)
+
+    then:
+    originalFile.text.equals(downloadedFile.text)
+
+    cleanup:
+    downloadedFile.delete()
+    credFile.delete()
+    System.clearProperty("addonsmgr.auth.credentials.file")
+    FileUtils.CREDENTIALS_SERVICE.reload()
+  }
+
+  def "[AM_AUTH_11] Download with credentials from JSON file and env var interpolation should work"() {
+    setup:
+    def originalFile = new File(getTestDataDir(), "catalog.json")
+    def downloadedFile = File.createTempFile("test", ".json")
+
+    // Create credentials file
+    File credFile = File.createTempFile("credentials", ".json")
+    credFile.text = """
+    [
+      {
+        "url": "${getWebServerRootUrl()}/protected-catalog.json",
+        "type": "basic",
+        "username": "testuser",
+        "password": "\${TEST_PASS_VAR}"
+      }
+    ]
+    """
+    System.setProperty("addonsmgr.auth.credentials.file", credFile.absolutePath)
+    FileUtils.CREDENTIALS_SERVICE.env = [TEST_PASS_VAR: "testpass"]
+    FileUtils.CREDENTIALS_SERVICE.reload()
+
+    when:
+    FileUtils.downloadFile("Testing download with JSON credentials and interpolation", 
+                          "${getWebServerRootUrl()}/protected-catalog.json", 
+                          downloadedFile)
+
+    then:
+    originalFile.text.equals(downloadedFile.text)
+
+    cleanup:
+    downloadedFile.delete()
+    credFile.delete()
+    System.clearProperty("addonsmgr.auth.credentials.file")
+    FileUtils.CREDENTIALS_SERVICE.env = System.getenv()
+    FileUtils.CREDENTIALS_SERVICE.reload()
+  }
+  }
