@@ -31,6 +31,11 @@ class FileUtils {
    * Logger
    */
   private static final Logger LOG = Logger.getInstance()
+
+  /**
+   * Credentials service
+   */
+  static final CredentialsService CREDENTIALS_SERVICE = new CredentialsService()
   
   /**
    * System property prefix for authentication
@@ -79,6 +84,20 @@ class FileUtils {
     if (!(conn instanceof HttpURLConnection)) {
       return
     }
+
+    HttpURLConnection httpConn = (HttpURLConnection) conn
+    String url = httpConn.getURL().toString()
+
+    // Try to get credentials from service first
+    Map credentials = CREDENTIALS_SERVICE.getCredentialsForURL(url)
+    if (credentials) {
+      if (credentials.unusable) {
+        // A variable of the matched entry is not set: send nothing rather than a placeholder or other credentials
+        return
+      }
+      applyCredentials(httpConn, credentials)
+      return
+    }
     
     String authType = getAuthType()
     if (!authType) {
@@ -86,12 +105,29 @@ class FileUtils {
       return
     }
     
-    HttpURLConnection httpConn = (HttpURLConnection) conn
-    
+    Map legacyCredentials = [
+      type: authType,
+      username: getAuthUsername(),
+      password: getAuthPassword(),
+      token: getAuthToken()
+    ]
+    applyCredentials(httpConn, legacyCredentials)
+  }
+
+  /**
+   * Apply credentials to a HTTP URL connection
+   * @param httpConn The HTTP URL connection
+   * @param credentials The credentials to apply
+   */
+  private static void applyCredentials(HttpURLConnection httpConn, Map credentials) {
+    // The type is always set here: the credentials file's entries are validated at load, the properties' type is checked
+    // by the caller, and an unusable entry never reaches this method
+    String authType = credentials.type
+
     switch (authType.toLowerCase()) {
       case AUTH_TYPE_BASIC:
-        String username = getAuthUsername()
-        String password = getAuthPassword()
+        String username = credentials.username
+        String password = credentials.password
         
         if (username && password) {
           String auth = "${username}:${password}"
@@ -99,18 +135,18 @@ class FileUtils {
           httpConn.setRequestProperty("Authorization", "Basic ${encodedAuth}")
           LOG.debug("Applied Basic authentication for user: ${username}")
         } else if (username || password) {
-          LOG.warn("Basic authentication configured but username or password missing. Please set -D${AUTH_PREFIX}username and -D${AUTH_PREFIX}password")
+          LOG.warn("Basic authentication configured but username or password missing. Please set -D${AUTH_PREFIX}username and -D${AUTH_PREFIX}password or check your credentials file.")
         }
         break
         
       case AUTH_TYPE_BEARER:
-        String token = getAuthToken()
+        String token = credentials.token
         
         if (token) {
           httpConn.setRequestProperty("Authorization", "Bearer ${token}")
           LOG.debug("Applied Bearer token authentication")
         } else {
-          LOG.warn("Bearer authentication configured but token missing. Please set -D${AUTH_PREFIX}token")
+          LOG.warn("Bearer authentication configured but token missing. Please set -D${AUTH_PREFIX}token or check your credentials file.")
         }
         break
         

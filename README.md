@@ -175,6 +175,53 @@ set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.type=bearer -Daddonsmgr.auth.token=eyJ
 addon.bat list
 ```
 
+#### JSON-based Credentials File
+
+For more complex scenarios, such as multiple servers with different credentials, you can use a JSON-based credentials file. Each entry applies to the download URLs its `url` matches, and its secrets can come from environment variables.
+
+To use a credentials file, set the following system property:
+
+- ```addonsmgr.auth.credentials.file=<path-to-json-file>```
+
+**Example JSON file:**
+```json
+[
+  {
+    "url": "https://repository\\.exoplatform\\.org/.*",
+    "type": "basic",
+    "username": "user1",
+    "password": "${USER1_PASSWORD}"
+  },
+  {
+    "url": "https://other\\.server\\.com/api/.*",
+    "type": "bearer",
+    "token": "${OTHER_TOKEN}"
+  }
+]
+```
+
+**Linux/Mac (bash):**
+```bash
+export ADDONSMGR_PROPERTIES="-Daddonsmgr.auth.credentials.file=/path/to/credentials.json"
+./addon list
+```
+
+**Windows (Command Prompt):**
+```bash
+set ADDONSMGR_PROPERTIES=-Daddonsmgr.auth.credentials.file=C:\path\to\credentials.json
+addon.bat list
+```
+
+**Notes on JSON format:**
+- The file can be a JSON array or a JSON object with a `credentials` property containing the array.
+- `url`: the download URL, or a regular expression that must match the **whole** URL (not only a part of it). The first matching entry applies; when none matches, the `addonsmgr.auth.*` properties apply.
+  - A credential is sent to every URL the pattern matches, so write it strictly: escape the dots (`\\.` in JSON), keep the `/` right after the host, and start with `https://`. `https://repository.exoplatform.org/.*` would also match `https://repository-exoplatform.org/x`.
+  - `${VAR_NAME}` is not replaced in `url`.
+- `type`: `basic` (needs `username` and `password`) or `bearer` (needs `token`). An entry that has no `url` or an invalid regex in it, an unsupported or missing `type`, or a missing secret is ignored, with a warning at startup.
+- `username`, `password` and `token`: `${VAR_NAME}` is replaced by the value of the environment variable `VAR_NAME`. When a variable is not set, a warning is logged and **no** `Authorization` header is sent for that download (neither the placeholder nor the `addonsmgr.auth.*` properties).
+- The file holds secrets in clear text unless its values are `${VAR_NAME}` references: restrict its permissions.
+- A redirect that the JDK follows itself (same protocol) is sent with the headers of the first request, and the JDK drops the `Authorization` header when it leads to another host or port. A redirect from `http` to `https` opens a new connection, for which the entry is chosen again from the new URL.
+
 #### Multiple Properties
 
 You can combine multiple system properties in the ```ADDONSMGR_PROPERTIES``` variable:
