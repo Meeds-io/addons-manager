@@ -16,7 +16,8 @@
  */
 package org.exoplatform.platform.am
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
 import org.exoplatform.platform.am.cli.CommandLineParameters
 import org.exoplatform.platform.am.ex.AddonNotInstalledException
 import org.exoplatform.platform.am.settings.EnvironmentSettings
