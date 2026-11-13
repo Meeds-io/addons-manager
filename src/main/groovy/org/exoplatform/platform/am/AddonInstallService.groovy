@@ -17,7 +17,8 @@
 package org.exoplatform.platform.am
 
 import groovy.json.StreamingJsonBuilder
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
 import org.exoplatform.platform.am.cli.CommandLineParameters
 import org.exoplatform.platform.am.cli.Conflict
 import org.exoplatform.platform.am.ex.AddonAlreadyInstalledException

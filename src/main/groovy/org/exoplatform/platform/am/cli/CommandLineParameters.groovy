@@ -101,7 +101,7 @@ class CommandLineParameters {
    * Verifies if is the verbose option is activated as main parameter or command parameter
    * @return true if the verbose option is activated as main parameter or command parameter
    */
-  Boolean isVerbose() {
+  boolean isVerbose() {
     return _verbose || commandList.verbose || commandDescribe.verbose || commandInstall.verbose || commandUninstall.verbose
   }
 
@@ -109,7 +109,7 @@ class CommandLineParameters {
    * Verifies if is the help option is activated as main parameter or command parameter
    * @return true if the help option is activated as main parameter or command parameter
    */
-  Boolean isHelp() {
+  boolean isHelp() {
     return _help || commandList.help || commandDescribe.help || commandInstall.help || commandUninstall.help
   }
 
@@ -117,7 +117,7 @@ class CommandLineParameters {
    * Verifies if is the batch option is activated as main parameter or command parameter
    * @return true if the batch option is activated as main parameter or command parameter
    */
-  Boolean isBatchMode() {
+  boolean isBatchMode() {
     return _batchMode || commandList.batchMode || commandDescribe.batchMode || commandInstall.batchMode || commandUninstall.batchMode
   }
 
