@@ -19,7 +19,8 @@ package org.exoplatform.platform.am
 import groovy.json.JsonSlurper
 import groovy.time.TimeCategory
 import groovy.transform.Canonical
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
 import groovy.xml.XmlUtil
 import org.eclipse.aether.util.version.GenericVersionScheme
