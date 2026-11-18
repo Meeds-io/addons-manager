@@ -49,15 +49,15 @@
     <!-- Project Dependencies -->
     <!-- **************************************** -->
     <aether.version>1.1.0</aether.version>
-    <groovy.version>2.4.21</groovy.version>
+    <groovy.version>6.0.0</groovy.version>
     <jcommander.version>1.82</jcommander.version>
     <jline.version>2.14.6</jline.version>
     <!-- Tests dependencies -->
-    <cglib.version>3.3.0</cglib.version>
+    <byte-buddy.version>1.18.15</byte-buddy.version>
     <hamcrest-core.version>2.2</hamcrest-core.version>
     <junit.version>4.13.2</junit.version>
     <objenesis.version>3.3</objenesis.version>
-    <spock-core.version>0.7-groovy-2.0</spock-core.version>
+    <spock-core.version>2.5-groovy-6.0</spock-core.version>
     <!-- **************************************** -->
     <!-- Build/Tests settings -->
     <!-- **************************************** -->
@@ -87,17 +87,17 @@
       <version>${jline.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
       <version>${groovy.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-json</artifactId>
       <version>${groovy.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-xml</artifactId>
       <version>${groovy.version}</version>
     </dependency>
@@ -111,19 +111,11 @@
       <artifactId>aether-util</artifactId>
       <version>${aether.version}</version>
     </dependency>
-    <!-- groovy-groovydoc is required for the site generation -->
-    <!-- We don't want to bundle it -->
+    <!-- To create Mocks of classes: Spock 2 does not mock with cglib on Java 21 -->
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-groovydoc</artifactId>
-      <version>${groovy.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- To create Mocks -->
-    <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib-nodep</artifactId>
-      <version>${cglib.version}</version>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>${byte-buddy.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -150,16 +142,6 @@
       <artifactId>spock-core</artifactId>
       <version>${spock-core.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>junit-dep</artifactId>
-          <groupId>junit</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>groovy-all</artifactId>
-          <groupId>org.codehaus.groovy</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
   <profiles>
@@ -207,12 +189,14 @@
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
+        <!-- maven-parent-pom's 1.5 predates Groovy 3 -->
+        <version>5.1.0</version>
         <executions>
           <execution>
             <id>default</id>
             <goals>
               <goal>compile</goal>
-              <goal>testCompile</goal>
+              <goal>compileTests</goal>
             </goals>
           </execution>
           <execution>
@@ -222,11 +206,21 @@
               <goal>groovydoc</goal>
             </goals>
             <configuration>
-              <groovydocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovydocOutputDirectory>
+              <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
               <scope>public</scope>
+              <!-- groovydoc reads the runtime classpath: groovy-groovydoc comes from the plugin's -->
+              <includeClasspath>PROJECT_AND_PLUGIN</includeClasspath>
             </configuration>
           </execution>
         </executions>
+        <dependencies>
+          <!-- Required for the site generation only: not bundled -->
+          <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy-groovydoc</artifactId>
+            <version>${groovy.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
